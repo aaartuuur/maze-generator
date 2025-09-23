@@ -8,8 +8,8 @@ pygame.init()
 
 width, height = 83, 83
 cell_size = 10
-size_room = 5
-count_exit = 4
+size_room = 35
+count_exit = 23
 
 screen_width = width * cell_size
 screen_height = height * cell_size

@@ -47,7 +47,7 @@ def generate_maze_prim(size, size_room, count_exit):
     down = []
     left = []
     right = []
-    for i in range(room_start, room_end):
+    for i in range(room_start, room_end, 2):
         up.append([room_start-1, i])
         down.insert(0, [room_end, i])
         left.insert(0, [i, room_start-1])
@@ -55,8 +55,9 @@ def generate_maze_prim(size, size_room, count_exit):
 
     perimetr = up + right + down + left
 
-    for i in range(0, len(perimetr), round(len(perimetr)/count_exit)):
-        maze[perimetr[i][0]][perimetr[i][1]] = ' '
+    step = len(perimetr) / count_exit
+    for i in range(count_exit):
+        maze[perimetr[int(i * step)][0]][perimetr[int(i * step)][1]] = ' '
 
 
     for i in range(size):
