@@ -1,6 +1,6 @@
 import pygame
 import sys
-from Backtracker import generate_maze_backtracker
+from Backtracker import generate_maze_backtracker, generate_maze_backtracker_without_recursion
 from Kruskal import generate_maze_kruskal
 from Prima import generate_maze_prim
 from Сellular_automata import generate_maze_cellular
@@ -15,7 +15,7 @@ cell_size = 10
 
 # width, height = 41, 27
 # cell_size = 30
-# maze_back = generate_maze_backtracker(width, height)
+maze_back = generate_maze_backtracker_without_recursion(width, height)
 
 screen_width = width * cell_size
 screen_height = height * cell_size
