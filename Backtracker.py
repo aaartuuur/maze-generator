@@ -1,8 +1,4 @@
 import random
-from collections import deque
-from inspect import stack
-
-from Prima import find_shortest_path
 
 
 def generate_maze_backtracker(width, height):
@@ -67,9 +63,4 @@ def generate_maze_backtracker_without_recursion(width, height, size_room = 0, ex
     maze[height // 2 - 1][width // 2 + size_room // 2 + (size_room // 2 + 1) % 2 + 1] = ' '
     maze[height // 2 - size_room // 2 - (size_room // 2 + 1) % 2 - 1][width // 2 + 1] = ' '
     maze[height // 2 + size_room // 2 + (size_room // 2) % 2][width // 2 + 1] = ' '
-
-    maze = find_shortest_path(maze, (height // 2 - 1, 1), (height // 2, width // 2))
-    maze = find_shortest_path(maze, (height // 2 - 1, width - 2), (height // 2, width // 2))
-    maze = find_shortest_path(maze, (1, width // 2), (height // 2, width // 2))
-    maze = find_shortest_path(maze, (height - 2, width // 2 - 1), (height // 2, width // 2))
     return maze
