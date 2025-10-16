@@ -73,25 +73,35 @@ class MazeGenerator:
                 self.maze[j][i] = '#'
                 self.maze[i][j] = '#'
 
+        return self.maze
+
+    def find_all_paths(self):
+        size=self.size
+        size_half=size//2
         count_input = 0
-        count_correct_input = 0
+        incorrect_input = []
 
         for i in range(2, size - 3):
             if self.maze[i][2] == ' ':
-                count_correct_input+=self.find_shortest_path((i, 2), (size_half, size_half))
-                count_input+=1
+                incorrect_input.append(self.find_shortest_path((i, 2), (size_half, size_half)))
+                count_input += 1
             if self.maze[size - 3][i] == ' ':
-                count_correct_input+=self.find_shortest_path((size - 3, i), (size_half, size_half))
+                incorrect_input.append(self.find_shortest_path((size - 3, i), (size_half, size_half)))
                 count_input += 1
             if self.maze[i][size - 3] == ' ':
-                count_correct_input+=self.find_shortest_path((i, size - 3), (size_half, size_half))
+                incorrect_input.append(self.find_shortest_path((i, size - 3), (size_half, size_half)))
                 count_input += 1
             if self.maze[2][i] == ' ':
-                count_correct_input+=self.find_shortest_path((2, i), (size_half, size_half))
+                incorrect_input.append(self.find_shortest_path((2, i), (size_half, size_half)))
                 count_input += 1
         print("Всего входов: ", count_input)
-        print("Ведущих к центру входов: ", count_correct_input)
-        return self.maze
+        incorrect=0
+        for start in incorrect_input:
+            if start is not None:
+                incorrect+=1
+                self.find_shortest_path(start, (size_half, size_half))
+        print("Входов не ведущих к выходу до пробива: ", incorrect)
+
 
     def find_shortest_path(self, start, end):
         if self.maze is None:
@@ -117,17 +127,24 @@ class MazeGenerator:
 
             if (x, y) == end:
                 for x, y in path[0:-1]:
-                    self.maze[x][y] = '1'
-                return 1
+                    if self.maze[x][y] != 'f':
+                        self.maze[x][y] = '1'
+                return None
 
             for dx, dy in directions:
                 new_x, new_y = x + dx, y + dy
 
                 if (0 <= new_x < rows and 0 <= new_y < cols and
-                        (self.maze[new_x][new_y] == ' ' or self.maze[new_x][new_y] == '1') and
+                        (self.maze[new_x][new_y] == ' ' or self.maze[new_x][new_y] == '1' or self.maze[new_x][new_y] == 'f') and
                         (new_x, new_y) not in visited):
                     new_path = path + [(new_x, new_y)]
                     queue.append((new_x, new_y, new_path))
                     visited.add((new_x, new_y))
 
-        return 0
+        #ломаем стенку если прохода нет
+
+        y_end, x_end = path[-1]
+        y_before, x_before = path[-2]
+        self.maze[min(max(2*y_end-y_before,0),self.size-1)][min(max(2*x_end-x_before, 0), self.size-1)]='f'
+
+        return start
