@@ -7,7 +7,7 @@ from Prima import MazeGenerator
 def main():
     pygame.init()
 
-    width, height = 15, 15
+    width, height = 65, 65
     cell_size = 10
     size_room = 3
     count_exit = 4

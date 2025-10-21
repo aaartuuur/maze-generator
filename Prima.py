@@ -100,8 +100,6 @@ class MazeGenerator:
             if start is not None:
                 incorrect+=1
                 self.find_shortest_path(start, (size_half, size_half))
-        print("Входов не ведущих к выходу до пробива: ", incorrect)
-
 
     def find_shortest_path(self, start, end):
         if self.maze is None:
@@ -141,10 +139,28 @@ class MazeGenerator:
                     queue.append((new_x, new_y, new_path))
                     visited.add((new_x, new_y))
 
-        #ломаем стенку если прохода нет
-
+        #ломаем стенку если прохода нетБ
         y_end, x_end = path[-1]
-        y_before, x_before = path[-2]
-        self.maze[min(max(2*y_end-y_before,0),self.size-1)][min(max(2*x_end-x_before, 0), self.size-1)]='f'
+        if 2 == y_end or y_end == self.size-3 or 2 == x_end or x_end == self.size-3:
+            start_x, start_y = start
+            center_x, center_y = end
+            if abs(center_x - start_x) > abs(center_y - start_y):
+                dx = 1 if center_x > start_x else -1 if center_x < start_x else 0
+                dy = 0
+            else:
+                dx = 0
+                dy = 1 if center_y > start_y else -1 if center_y < start_y else 0
 
+            current_x, current_y = start_x + dx, start_y + dy
+
+            while (0 <= current_x < rows and 0 <= current_y < cols):
+                if self.maze[current_x][current_y] == '#':
+                    self.maze[current_x][current_y] = 'f'
+                    break
+                current_x += dx
+                current_y += dy
+        else:
+            y_before, x_before = path[-2]
+            self.maze[min(max(2 * y_end - y_before, 0), self.size - 1)][
+                min(max(2 * x_end - x_before, 0), self.size - 1)] = 'f'
         return start
